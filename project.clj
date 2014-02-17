@@ -6,6 +6,7 @@
   :dependencies
   [[ring-server "0.3.1"]
    [com.taoensso/timbre "3.0.0"]
+   [clj-time "0.6.0"]
    [environ "0.4.0"]
    [markdown-clj "0.9.41"]
    [korma "0.3.0-RC6"]
@@ -21,6 +22,7 @@
    [lib-noir "0.8.0"]
    [compojure "1.1.6"]
    [selmer "0.5.9"]]
+  :immutant {:context-path "/"}
   :ring
   {:handler blog.handler/app,
    :init blog.handler/init,
