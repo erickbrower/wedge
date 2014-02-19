@@ -38,7 +38,7 @@
   :url
   "http://example.com/FIXME"
   :plugins
-  [[lein-ring "0.8.10"] [lein-environ "0.4.0"]]
+  [[lein-ring "0.8.10"][lein-environ "0.4.0"][lein-immutant "1.2.0"]]
   :description
   "A simple markdown-powered blog."
   :min-lein-version "2.0.0")

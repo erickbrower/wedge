@@ -28,31 +28,37 @@
         (cstr/split #"\-")
         (subvec 1))))
 
-(defn get-date [file]
-  (let [date-str (-> (.getName file)
-                     (strip-extension)
-                     (cstr/split #"\-")
-                     (first))]
-    (->> date-str
-         (ctime/parse file-date-formatter)
-         (ctime/unparse display-date-formatter))))
+(defn get-raw-date [file]
+  (-> (.getName file)
+      (strip-extension)
+      (cstr/split #"\-")
+      (first)))
+
+(defn get-display-date [file]
+  (->> (get-raw-date file)
+       (ctime/parse file-date-formatter)
+       (ctime/unparse display-date-formatter)))
 
 (defn get-slug [file]
   (-> (.getName file)
       (strip-extension)))
 
+(defn load-post [file]
+  (hash-map :title (get-title file)
+            :date (get-raw-date file)
+            :slug (get-slug file)
+            :content (->> file
+                          (.getAbsolutePath)
+                          (slurp)
+                          (md/md-to-html-string))))
+
 (def post-files 
+  "Sorted by date, most recent first"
   (->> 
     (clojure.java.io/file "resources/public/posts")
     (file-seq)
     (reverse)
     (filter #(.isFile %))))
-
-(defn load-post [file]
-  (hash-map :title (get-title file)
-            :date (get-date file)
-            :slug (get-slug file)
-            :content (slurp (.getAbsolutePath file))))
 
 (defn load-post-by-slug [slug]
   (-> slug
@@ -62,9 +68,7 @@
       (load-post)))
 
 (defn load-latest-posts 
-  ([] (->> post-files
-           (take 5)
-           (map #(load-post %))))
+  ([] (load-latest-posts 5))
   ([top] (->> post-files
            (take top)
            (map #(load-post %)))))

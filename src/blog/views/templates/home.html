@@ -1,8 +1,14 @@
 {% extends "blog/views/templates/base.html" %}
 {% block content %}
-  <div class="row-fluid">
-    <div class="span8">
-    {{content|safe}}
-    </div>
+  {% for post in posts %}
+  <div class="blog-post">
+    <h2 class="blog-post-title">
+      {{post.title}}
+    </h2>
+    <p class="blog-post-meta">
+      {{post.date}} by <a href="#">Erick</a>
+    </p>
+    {{post.content|safe}}
   </div>
+  {% endfor %}
 {% endblock %}
